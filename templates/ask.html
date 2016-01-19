@@ -1,0 +1,64 @@
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask a Question</title>
+</head>
+{% include 'header.html' %}
+<body>
+<div class="container">
+<form action="/ask" method="post">
+    <div>
+        <input type="text" placeholder="Enter subject here..." name="question_subject" class="question_subject"/>
+    </div>
+    <div>
+        <textarea type="text" placeholder="Enter question here..." name="question_body"></textarea>
+    </div>
+    <button class="button postfix" type="submit">Add</button>
+    <div id="similar" style="display:none">
+        <h3>Similar questions:</h3>
+        <div id="results"></div>
+    </div>
+</form>
+</body>
+</div>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $(".question_subject").blur(function () {
+            var similarQuestions;
+            var subject = $(".question_subject").val();
+            $.get("/api/matchscore?subject=" + subject, function (data) {
+                displayMatchedQuestions(data.matchscore);
+            });
+        });
+
+        $(".question_subject").focus(function () {
+            $("#similar").hide();
+            $("#results").html("");
+        });
+    });
+
+    function displayMatchedQuestions(data) {
+        $.each(data, function (k, v) {
+            var questionKey = Object.keys(data[k])[0];
+            $.get("/api/question/" + questionKey, function (data) {
+                appendToResults(data.subject, data.question_id);
+            });
+        });
+    }
+
+    function appendToResults(subject, id) {
+        $("#similar").show();
+        var newLink = $("<a />", {
+            name: "link",
+            href: "/question/" + id,
+            text: subject
+        });
+        $("#results").append("<br>");
+        $("#results").append(newLink);
+    }
+</script>

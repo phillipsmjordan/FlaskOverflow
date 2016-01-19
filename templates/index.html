@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlaskOverflow</title>
+</head>
+{% include 'header.html' %}
+
+<body>
+<div class="container">
+    <td>
+        {% if questions|length > 0 %}
+            {% for question in questions %}
+                <tr>
+            <span><h3><a href="/question/{{ question.id }}">{{ question.subject }}</a>
+                <small>
+                    - {{ question.timestamp.strftime('%b %d %Y %H:%M:%S') }}</small>
+            </h3></span>
+
+                    <div>Views: {{ question.views }}</div>
+                    <div>
+                        Answers: {{ answer_count[question.id] }}
+                    </div>
+                    {% if answer_count[question.id] > 0 %}
+                        <div>
+                            Top answer upvoted {{ top_answers[question.id].upvote_count }}
+                            {% if top_answers[question.id].upvote_count == 1 %}
+                                time
+                            {% else %}
+                                times
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </td>
+        {% else %}
+            <strong>There are no questions. Try asking one by clicking on the navbar!</strong>
+        {% endif %}
+</div>
+</body>
+</html>

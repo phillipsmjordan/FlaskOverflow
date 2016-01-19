@@ -1,0 +1,16 @@
+body {
+    padding-top: 100px;
+}
+
+textarea {
+    height: 300px;
+    width: 800px;
+}
+
+.answer {
+    padding-left: 40px;
+}
+
+.question_subject {
+    width: 400px;
+}

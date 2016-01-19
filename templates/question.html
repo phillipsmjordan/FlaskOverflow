@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ question.subject }}</title>
+</head>
+{% include 'header.html' %}
+<body>
+<div class="container">
+    <div id="question">
+        <h3>{{ question.subject }}</h3>
+        <p class="lead">{{ question.body }}</p>
+        <hr/>
+    </div>
+    <div>
+        <td id="answers">
+            {% for answer in answers %}
+                <tr>
+                <div class="answer" data-answer_id="{{ answer.id }}">
+                    {{ answer.body }}
+
+                    <p><mark>Posted on {{ answer.timestamp.strftime('%b %d %Y %H:%M:%S') }}</mark></p>
+                    <span class="upvote_count glyphicon glyphicon-circle-arrow-up" aria-hidden="true"> {{ answer.upvote_count }} </span>
+                    <p class="upvote"><a href="javascript:void(0)">Upvote this answer</a></p>
+                </div>
+                <hr/>
+            {% endfor %}
+            </tr>
+        </td>
+    </div>
+    <div>
+        <p class="lead">Answer this question:</p>
+
+        <form action="/answer/{{ question.id }}" method="post">
+            <div>
+                <textarea type="text" placeholder="Enter answer here..." name="answer_body"></textarea>
+            </div>
+            <button class="button postfix" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('.answer').linkify();
+
+        var upvote_div;
+        var upvote_count_div;
+        $('.upvote').click(function () {
+            upvote_div = $(this);
+            upvote_count_div = $(this).prev();
+            var answer_id = $(this).closest('div').data('answer_id');
+            $.post("/api/upvote/" + answer_id, function (data, status) {
+                updateUpvotes(data);
+            });
+        });
+
+        function updateUpvotes(data) {
+            upvote_div.html("Upvoted!");
+            console.log(upvote_count_div);
+            upvote_count_div.html(" " + data['new_total']);
+        }
+    });
+</script>

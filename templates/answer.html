@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Answer - {{ question.subject }}</title>
+</head>
+<body>
+<h3>{{ question.subject }}</h3>
+
+<div>
+    Asked on: {{ question.timestamp }}
+</div>
+<div class="row">
+    <p>{{ question.body }}</p>
+</div>
+<hr>
+
+<form action="/answer/{{ question.id }}" method="post">
+    <div>
+        Answer this question:
+        <textarea type="text" name="answer_body"></textarea>
+    </div>
+    <button class="button postfix" type="submit">Submit</button>
+</form>
+</body>
+</html>
