@@ -7,3 +7,9 @@ Simple StackOverflow clone built using:
 * PostgreSQL
 * jQuery
 * Bootstrap
+
+Features:
+* Post/reply system
+* Reply upvoting and relevant sorting
+* Automatic searching of similar topics before posting new questions
+* Database reset
